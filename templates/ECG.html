@@ -1,0 +1,1507 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CardioCare - Heart Specialists</title>
+
+    <!-- FontAwesome for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <script src="{% static 'css/script.js' %}"></script>
+  </head>
+  <style>
+    /* Section Background & Layout */
+    .ecg-diagnostics-section {
+      background:
+        radial-gradient(
+          circle at 90% 50%,
+          rgba(220, 38, 38, 0.15) 0%,
+          transparent 50%
+        ),
+        linear-gradient(135deg, #0b1120 0%, #171f38 100%);
+      padding: 80px 20px;
+      color: #ffffff;
+      font-family:
+        "Inter",
+        system-ui,
+        -apple-system,
+        sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .ecg-container {
+      max-width: 1200px;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 50px;
+    }
+
+    /* Left Content Styles */
+    .ecg-content {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .ecg-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: rgba(220, 38, 38, 0.15);
+      color: #f87171;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(220, 38, 38, 0.3);
+    }
+
+    .ecg-badge .badge-icon {
+      font-size: 12px;
+    }
+
+    .ecg-content h1 {
+      font-size: 48px;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+
+    .ecg-content h1 .highlight-text {
+      color: #fb7185;
+    }
+
+    .ecg-content p {
+      color: #94a3b8;
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 35px;
+      max-width: 480px;
+    }
+
+    /* Buttons Styles */
+    .ecg-button-group {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease-in-out;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background-color: #dc2626;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(220, 38, 38, 0.4);
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #b91c1c;
+    }
+
+    .btn-secondary {
+      background-color: rgba(30, 41, 59, 0.6);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .btn-secondary:hover {
+      background-color: rgba(51, 65, 85, 0.8);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Right Image & Floating Badge Styles */
+    .ecg-image-wrapper {
+      flex: 1;
+      min-width: 300px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .ecg-image-box {
+      width: 100%;
+      max-width: 440px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .ecg-image-box img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Floating Card inside Image */
+    .floating-ecg-card {
+      position: absolute;
+      top: -24px;
+      left: 20px;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 10px 16px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      z-index: 10;
+    }
+
+    .floating-ecg-card .card-icon {
+      background-color: #fee2e2;
+      color: #dc2626;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .floating-ecg-card .card-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .floating-ecg-card .card-text strong {
+      font-size: 13px;
+      color: #0f172a;
+    }
+
+    .floating-ecg-card .card-text span {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    /* Responsive Styles for Smaller Screens */
+    @media (max-width: 768px) {
+      .ecg-container {
+        flex-direction: column;
+        text-align: left;
+      }
+
+      .ecg-content h1 {
+        font-size: 36px;
+      }
+
+      .floating-ecg-card {
+        top: -15px;
+        left: 10px;
+      }
+    }
+    .cardiac-testing-section {
+      padding: 60px 20px;
+      background-color: #fcfcfc;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header-badge {
+      display: inline-block;
+      background-color: #ffe6e6;
+      color: #ff4d4d;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: bold;
+      border-radius: 20px;
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+    }
+
+    .cardiac-testing-section h2 {
+      font-size: 32px;
+      color: #111;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 16px;
+      max-width: 600px;
+      margin: 0 auto 40px auto;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .diagnostic-card {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: left;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      border: 1px solid #eaeaea;
+      transition: transform 0.2s ease;
+    }
+
+    .diagnostic-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .icon-box {
+      width: 45px;
+      height: 45px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 20px;
+      background: #f0f4f8;
+    }
+
+    .diagnostic-card h3 {
+      font-size: 18px;
+      color: #222;
+      margin-bottom: 10px;
+    }
+
+    .diagnostic-card p {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+    .trust-section {
+      padding: 80px 20px;
+      background-color: #0b1329; /* Dark background as shown in image */
+      font-family: Arial, sans-serif;
+      text-align: center;
+      color: #ffffff;
+    }
+
+    .trust-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .trust-badge {
+      display: inline-block;
+      background-color: rgba(255, 255, 255, 0.08);
+      color: #60a5fa;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: bold;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .trust-section h2 {
+      font-size: 36px;
+      color: #ffffff;
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .trust-subtitle {
+      color: #94a3b8;
+      font-size: 16px;
+      max-width: 600px;
+      margin: 0 auto 50px auto;
+      line-height: 1.6;
+    }
+
+    .trust-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+    }
+
+    .trust-card {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 40px 30px;
+      border-radius: 16px;
+      text-align: left;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition:
+        transform 0.3s ease,
+        background 0.3s ease;
+    }
+
+    .trust-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .trust-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 25px;
+    }
+
+    .blue-icon {
+      background-color: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+    }
+
+    .red-icon {
+      background-color: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+    }
+
+    .green-icon {
+      background-color: rgba(34, 197, 94, 0.15);
+      color: #4ade80;
+    }
+
+    .trust-card h3 {
+      font-size: 20px;
+      color: #ffffff;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .trust-card p {
+      font-size: 14px;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+    .journey-section {
+      padding: 80px 20px;
+      background-color: #ffffff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    .journey-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .journey-badge {
+      display: inline-block;
+      background-color: #ffeaea;
+      color: #ff5c5c;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: bold;
+      border-radius: 20px;
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+    }
+
+    .journey-section h2 {
+      font-size: 36px;
+      color: #111827;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .journey-subtitle {
+      color: #6b7280;
+      font-size: 16px;
+      max-width: 600px;
+      margin: 0 auto 50px auto;
+      line-height: 1.5;
+    }
+
+    .journey-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+    }
+
+    .journey-card {
+      background: #ffffff;
+      padding: 35px 25px;
+      border-radius: 16px;
+      text-align: center;
+      border: 1px solid #f3f4f6;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+      transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    }
+
+    .journey-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+    }
+
+    .journey-icon-circle {
+      width: 60px;
+      height: 60px;
+      background-color: #2563eb;
+      color: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin: 0 auto 20px auto;
+    }
+
+    .journey-card h3 {
+      font-size: 18px;
+      color: #1f2937;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .journey-card p {
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    .insight-section {
+      padding: 80px 20px;
+      background-color: #ffffff;
+      font-family: Arial, sans-serif;
+    }
+
+    .insight-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .insight-badge {
+      display: inline-block;
+      background-color: #ffeaea;
+      color: #ff5c5c;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: bold;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    .insight-section h2 {
+      font-size: 34px;
+      color: #111827;
+      margin-bottom: 20px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .insight-quote-text {
+      font-size: 16px;
+      color: #4b5563;
+      line-height: 1.6;
+      margin-bottom: 30px;
+      font-style: italic;
+    }
+
+    .doctor-profile {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .doctor-avatar {
+      width: 50px;
+      height: 50px;
+      background-color: #ef4444;
+      color: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .doctor-details h4 {
+      font-size: 16px;
+      color: #1f2937;
+      margin: 0 0 4px 0;
+      font-weight: 600;
+    }
+
+    .doctor-details p {
+      font-size: 13px;
+      color: #6b7280;
+      margin: 0;
+    }
+
+    /* Right Testimonial Card Styling */
+    .testimonial-card-dark {
+      background-color: #101b33;
+      padding: 40px;
+      border-radius: 20px;
+      color: #ffffff;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .testimonial-text {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #e5e7eb;
+      margin-bottom: 30px;
+      font-style: italic;
+    }
+
+    .patient-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .patient-avatar {
+      width: 40px;
+      height: 40px;
+      background-color: #10b981;
+      color: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .patient-details h5 {
+      font-size: 15px;
+      color: #ffffff;
+      margin: 0 0 2px 0;
+      font-weight: 600;
+    }
+
+    .patient-details p {
+      font-size: 12px;
+      color: #9ca3af;
+      margin: 0;
+    }
+
+    /* Responsive Design for smaller screens */
+    @media (max-width: 900px) {
+      .insight-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+    }
+    .diag-faq-section {
+      padding: 80px 20px;
+      background-color: #ffffff;
+      font-family: Arial, sans-serif;
+    }
+
+    .diag-faq-container {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .diag-faq-badge {
+      display: inline-block;
+      background-color: #ffeaea;
+      color: #ff5c5c;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: bold;
+      border-radius: 20px;
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+    }
+
+    .diag-faq-section h2 {
+      font-size: 34px;
+      color: #111827;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .diag-faq-subtitle {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 50px;
+    }
+
+    .diag-faq-list {
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .diag-faq-item {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 20px 0;
+      transition: all 0.3s ease;
+    }
+
+    .diag-faq-question {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1f2937;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      list-style: none; /* Removes default arrow in some browsers */
+    }
+
+    /* Removes default marker for details tag */
+    .diag-faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .diag-faq-icon {
+      font-size: 22px;
+      color: #ef4444;
+      font-weight: 400;
+      transition: transform 0.3s ease;
+    }
+
+    /* Rotate icon when open */
+    .diag-faq-item[open] .diag-faq-icon {
+      transform: rotate(45deg);
+    }
+
+    .diag-faq-answer {
+      padding-top: 15px;
+      color: #4b5563;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .diag-booking-section {
+      padding: 80px 20px;
+      background-color: #ffffff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    .diag-booking-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .diag-booking-badge {
+      display: inline-block;
+      background-color: #ffeaea;
+      color: #ff5c5c;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: bold;
+      border-radius: 20px;
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+    }
+
+    .diag-booking-section h2 {
+      font-size: 34px;
+      color: #111827;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .diag-booking-subtitle {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 40px;
+    }
+
+    .diag-form-box {
+      background-color: #0b1329; /* Dark card background as shown in image */
+      padding: 40px;
+      border-radius: 20px;
+      text-align: left;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .diag-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .diag-input-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .diag-input-group.full-width {
+      grid-column: span 2;
+      margin-bottom: 25px;
+    }
+
+    .diag-input-group label {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .diag-input-group input,
+    .diag-input-group select,
+    .diag-input-group textarea {
+      background-color: #131c38;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 12px 15px;
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .diag-input-group input:focus,
+    .diag-input-group select:focus,
+    .diag-input-group textarea:focus {
+      border-color: #3b82f6;
+    }
+
+    .diag-input-group input::placeholder,
+    .diag-input-group textarea::placeholder {
+      color: #475569;
+    }
+
+    .diag-submit-btn {
+      background-color: #dc2626; /* Red button */
+      color: #ffffff;
+      border: none;
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .diag-submit-btn:hover {
+      background-color: #b91c1c;
+    }
+
+    /* Responsive design for mobile screens */
+    @media (max-width: 768px) {
+      .diag-form-grid {
+        grid-template-columns: 1fr;
+      }
+      .diag-input-group.full-width {
+        grid-column: span 1;
+      }
+      .diag-form-box {
+        padding: 20px;
+      }
+    }
+  </style>
+
+  <body>
+    <!-- Loading Screen -->
+    <div id="loader">
+      <div class="loader-content">
+        <div class="heart">♥</div>
+        <div class="ecg">
+          <svg viewBox="0 0 300 70">
+            <polyline
+              points="0,35 65,35 78,35 86,10 95,58 105,18 115,35 175,35 188,35 196,10 205,58 215,18 225,35 280,35 290,5"
+            />
+          </svg>
+        </div>
+
+        <h2 href="/">CardioCare</h2>
+        <p>Expert Heart Care Loading...</p>
+      </div>
+    </div>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="top-bar-container">
+        <div class="top-bar-left">
+          <span class="emergency-badge">
+            <span class="pulse-dot"></span> 24/7 Emergency:
+          </span>
+          <a href="tel:+1800227346"> +1 (800) CARDIO</a>
+          <span class="separator">|</span>
+          <a href="mailto:care@cardiocare.com">care@cardiocare.com</a>
+        </div>
+        <div class="top-bar-right">
+          <span>Mon–Sat: 8AM – 8PM</span>
+          <span class="separator">|</span>
+          <span>Emergency: 24/7</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <header class="navbar-header">
+      <div class="nav-container">
+        <a href="#" class="logo">
+          <div class="logo-icon">
+            <i class="fa-solid fa-heart-pulse"></i>
+          </div>
+          <div class="logo-text">
+            <a href="/" class="brand-name">CardioCare</a>
+            <span class="brand-sub">Heart Specialists</span>
+          </div>
+        </a>
+
+        <nav class="nav-links">
+          <a href="#home" class="active">Home</a>
+          <a href="#about">About</a>
+          <a href="#services">Services</a>
+          <a href="#departments">Departments</a>
+          <a href="#appointments">Appointments</a>
+          <a href="#blog">Blog</a>
+          <a href="#contact">Contact</a>
+        </nav>
+
+        <div class="nav-action">
+          <a href="#" class="btn-book-appointment">
+            <i class="fa-regular fa-calendar-days"></i> Book Appointment
+          </a>
+        </div>
+      </div>
+    </header>
+    <section class="ecg-diagnostics-section">
+      <div class="ecg-container">
+        <!-- Left Content Area -->
+        <div class="ecg-content">
+          <div class="ecg-badge">
+            <span class="badge-icon">⚡</span> ADVANCED CARDIAC TESTING
+          </div>
+
+          <h1>ECG & <span class="highlight-text">Diagnostics</span></h1>
+
+          <p>
+            State-of-the-art electrocardiography, stress testing,
+            echocardiography, and Holter monitoring to give your heart the
+            precise attention it deserves.
+          </p>
+
+          <div class="ecg-button-group">
+            <a href="#schedule" class="btn btn-primary">
+              <span class="btn-icon">📋</span> Schedule a Test
+            </a>
+            <a href="#explore" class="btn btn-secondary">
+              <span class="btn-icon">🔍</span> Explore Tests
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Image Area -->
+        <div class="ecg-image-wrapper">
+          <div class="floating-ecg-card">
+            <div class="card-icon">⚡</div>
+            <div class="card-text">
+              <strong>Instant ECG</strong>
+              <span>Results in minutes</span>
+            </div>
+          </div>
+
+          <div class="ecg-image-box">
+            <img src="{% static 'images/about2.jpg' %}" alt="Solatec Logo" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cardiac-testing-section">
+      <div class="container">
+        <div class="header-badge">OUR DIAGNOSTICS</div>
+        <h2>Comprehensive Cardiac Testing</h2>
+        <p class="subtitle">
+          From routine ECGs to advanced imaging, we offer a full spectrum of
+          non-invasive and minimally invasive heart tests.
+        </p>
+
+        <div class="cards-grid">
+          <!-- Card 1 -->
+          <div class="diagnostic-card">
+            <div class="icon-box blue">📈</div>
+            <h3>Resting ECG (EKG)</h3>
+            <p>
+              Quick, painless recording of the heart's electrical activity to
+              detect rhythm abnormalities, blockages, and past heart attacks.
+            </p>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="diagnostic-card">
+            <div class="icon-box red">❤️</div>
+            <h3>Stress Test (Treadmill)</h3>
+            <p>
+              Evaluates how your heart responds to exertion, uncovering issues
+              that may not appear at rest.
+            </p>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="diagnostic-card">
+            <div class="icon-box purple">🩻</div>
+            <h3>Echocardiogram</h3>
+            <p>
+              Ultrasound imaging to visualize heart chambers, valves, and
+              pumping strength in real time.
+            </p>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="diagnostic-card">
+            <div class="icon-box green">⏰</div>
+            <h3>Holter Monitoring</h3>
+            <p>
+              24–48 hour continuous ECG recording to catch intermittent
+              arrhythmias that a brief ECG might miss.
+            </p>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="diagnostic-card">
+            <div class="icon-box yellow">💻</div>
+            <h3>Ambulatory BP Monitoring</h3>
+            <p>
+              24-hour blood pressure tracking to diagnose hypertension patterns
+              and guide treatment.
+            </p>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="diagnostic-card">
+            <div class="icon-box orange">📄</div>
+            <h3>Cardiac MRI / CT</h3>
+            <p>
+              Advanced imaging for detailed anatomy, scar tissue, and coronary
+              artery assessment.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust-section">
+      <div class="trust-container">
+        <div class="trust-badge">WHY OUR DIAGNOSTICS</div>
+        <h2>Precision You Can Trust</h2>
+        <p class="trust-subtitle">
+          Our lab combines the latest technology with expert cardiologist
+          interpretation to give you clear, actionable results.
+        </p>
+
+        <div class="trust-cards-grid">
+          <!-- Card 1: Latest Equipment -->
+          <div class="trust-card">
+            <div class="trust-icon-box blue-icon">🔬</div>
+            <h3>Latest Equipment</h3>
+            <p>
+              We use GE, Philips, and Siemens systems for the highest resolution
+              imaging and signal quality.
+            </p>
+          </div>
+
+          <!-- Card 2: Cardiologist-Read -->
+          <div class="trust-card">
+            <div class="trust-icon-box red-icon">👤</div>
+            <h3>Cardiologist-Read</h3>
+            <p>
+              Every scan is personally reviewed by Dr. Carter, ensuring expert
+              correlation with your clinical picture.
+            </p>
+          </div>
+
+          <!-- Card 3: Fast Turnaround -->
+          <div class="trust-card">
+            <div class="trust-icon-box green-icon">⏰</div>
+            <h3>Fast Turnaround</h3>
+            <p>
+              Most basic results are ready in 24-48 hours; urgent cases are
+              prioritized and often available the same day.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="journey-section">
+      <div class="journey-container">
+        <div class="journey-badge">PROCESS</div>
+        <h2>Your Diagnostic Journey</h2>
+        <p class="journey-subtitle">
+          Four straightforward steps from test order to treatment plan.
+        </p>
+
+        <div class="journey-grid">
+          <!-- Step 1 -->
+          <div class="journey-card">
+            <div class="journey-icon-circle">📋</div>
+            <h3>1. Consultation & Order</h3>
+            <p>
+              We determine the right test based on your symptoms and history.
+            </p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="journey-card">
+            <div class="journey-icon-circle">💻</div>
+            <h3>2. The Test</h3>
+            <p>
+              Performed by certified technicians in a comfortable, private
+              suite.
+            </p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="journey-card">
+            <div class="journey-icon-circle">📄</div>
+            <h3>3. Expert Analysis</h3>
+            <p>
+              Dr. Carter interprets the results and discusses them with you.
+            </p>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="journey-card">
+            <div class="journey-icon-circle">🤝</div>
+            <h3>4. Action Plan</h3>
+            <p>
+              Receive a clear diagnosis and personalized treatment or prevention
+              roadmap.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="insight-section">
+      <div class="insight-container">
+        <!-- Left Column: Doctor Info -->
+        <div class="insight-content">
+          <div class="insight-badge">EXPERT INSIGHT</div>
+          <h2>Dr. Jonathan Carter on Diagnostics</h2>
+          <p class="insight-quote-text">
+            “An accurate diagnosis is the cornerstone of effective cardiac care.
+            Our diagnostic suite is equipped to detect problems at their
+            earliest, most treatable stage — often before symptoms even appear.”
+          </p>
+
+          <div class="doctor-profile">
+            <div class="doctor-avatar">JC</div>
+            <div class="doctor-details">
+              <h4>Dr. Jonathan Carter, MD, FACC</h4>
+              <p>Senior Cardiologist & Director of Diagnostics</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Patient Testimonial Card -->
+        <div class="insight-testimonial">
+          <div class="testimonial-card-dark">
+            <p class="testimonial-text">
+              “The echocardiogram found a valve issue I'd had for years without
+              knowing. Because of the detailed report, I started treatment early
+              and avoided surgery.”
+            </p>
+
+            <div class="patient-profile">
+              <div class="patient-avatar">AM</div>
+              <div class="patient-details">
+                <h5>Amanda Moore</h5>
+                <p>Diagnostics Patient, 2024</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="diag-faq-section">
+      <div class="diag-faq-container">
+        <div class="diag-faq-badge">FAQ</div>
+        <h2>Questions About Our Diagnostics</h2>
+        <p class="diag-faq-subtitle">
+          Everything you need to know before your test.
+        </p>
+
+        <div class="diag-faq-list">
+          <!-- FAQ Item 1 -->
+          <details class="diag-faq-item">
+            <summary class="diag-faq-question">
+              <span>How long does an ECG take?</span>
+              <span class="diag-faq-icon">+</span>
+            </summary>
+            <div class="diag-faq-answer">
+              <p>
+                A standard resting ECG usually takes about 5 to 10 minutes to
+                perform, while preparation and setup take a few extra minutes.
+              </p>
+            </div>
+          </details>
+
+          <!-- FAQ Item 2 -->
+          <details class="diag-faq-item">
+            <summary class="diag-faq-question">
+              <span>Are the tests painful?</span>
+              <span class="diag-faq-icon">+</span>
+            </summary>
+            <div class="diag-faq-answer">
+              <p>
+                No, most of our non-invasive cardiac tests are completely
+                painless and safe, involving little to no discomfort.
+              </p>
+            </div>
+          </details>
+
+          <!-- FAQ Item 3 -->
+          <details class="diag-faq-item">
+            <summary class="diag-faq-question">
+              <span>When will I get my results?</span>
+              <span class="diag-faq-icon">+</span>
+            </summary>
+            <div class="diag-faq-answer">
+              <p>
+                Most basic results are ready within 24–48 hours, and urgent
+                findings are prioritized for same-day delivery.
+              </p>
+            </div>
+          </details>
+
+          <!-- FAQ Item 4 -->
+          <details class="diag-faq-item">
+            <summary class="diag-faq-question">
+              <span>How should I prepare for a stress test?</span>
+              <span class="diag-faq-icon">+</span>
+            </summary>
+            <div class="diag-faq-answer">
+              <p>
+                Wear comfortable clothing and walking shoes. Avoid heavy meals
+                and caffeine for a few hours before the test as instructed by
+                your doctor.
+              </p>
+            </div>
+          </details>
+
+          <!-- FAQ Item 5 -->
+          <details class="diag-faq-item">
+            <summary class="diag-faq-question">
+              <span>Do you accept my insurance?</span>
+              <span class="diag-faq-icon">+</span>
+            </summary>
+            <div class="diag-faq-answer">
+              <p>
+                We work with most major insurance providers. Please contact our
+                front desk with your policy details to verify your coverage.
+              </p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="diag-booking-section">
+      <div class="diag-booking-container">
+        <div class="diag-booking-badge">SCHEDULE A TEST</div>
+        <h2>Request Your Diagnostic Appointment</h2>
+        <p class="diag-booking-subtitle">
+          Complete the form and our team will confirm your test within 2 hours
+          during working hours.
+        </p>
+
+        <form class="diag-form-box">
+          <div class="diag-form-grid">
+            <!-- Full Name -->
+            <div class="diag-input-group">
+              <label>Full Name *</label>
+              <input type="text" placeholder="Your full name" required />
+            </div>
+
+            <!-- Email Address -->
+            <div class="diag-input-group">
+              <label>Email Address *</label>
+              <input type="email" placeholder="you@email.com" required />
+            </div>
+
+            <!-- Phone Number -->
+            <div class="diag-input-group">
+              <label>Phone Number *</label>
+              <input type="tel" placeholder="+1 (555) 000-0000" required />
+            </div>
+
+            <!-- Preferred Date -->
+            <div class="diag-input-group">
+              <label>Preferred Date *</label>
+              <input type="date" placeholder="dd-mm-yyyy" required />
+            </div>
+
+            <!-- Test Type -->
+            <div class="diag-input-group">
+              <label>Test Type *</label>
+              <select required>
+                <option value="" disabled selected>Resting ECG</option>
+                <option value="ecg">Resting ECG (EKG)</option>
+                <option value="stress">Stress Test (Treadmill)</option>
+                <option value="echo">Echocardiogram</option>
+                <option value="holter">Holter Monitoring</option>
+              </select>
+            </div>
+
+            <!-- Referring Physician -->
+            <div class="diag-input-group">
+              <label>Referring Physician (if any)</label>
+              <input type="text" placeholder="Doctor's name" />
+            </div>
+          </div>
+
+          <!-- Additional Notes -->
+          <div class="diag-input-group full-width">
+            <label>Additional Notes</label>
+            <textarea
+              rows="4"
+              placeholder="Briefly describe your symptoms or reason for testing"
+            ></textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="diag-submit-btn">
+            ✈ Request Appointment
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer-section">
+      <!-- Top Emergency Footer Strip -->
+      <div class="footer-emergency-strip">
+        <div class="footer-emergency-container">
+          <div class="footer-emergency-left">
+            <div class="footer-emergency-icon">
+              <i class="fa-solid fa-phone-volume"></i>
+            </div>
+            <div>
+              <h4>Cardiac Emergency? Call Us Now</h4>
+              <p>Our emergency team responds within minutes, 24 hours a day.</p>
+            </div>
+          </div>
+          <div class="footer-emergency-right">
+            <a href="tel:1800227346" class="footer-btn-call"
+              ><i class="fa-solid fa-phone"></i> +1 (800) CARDIO</a
+            >
+            <a href="mailto:care@cardiocare.com" class="footer-btn-email"
+              ><i class="fa-solid fa-envelope"></i> Email Us</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Footer Content -->
+      <div class="footer-container">
+        <div class="footer-top-grid">
+          <!-- Col 1: Brand & Badges -->
+          <div class="footer-brand-col">
+            <div class="footer-logo">
+              <div class="footer-logo-icon">
+                <i class="fa-solid fa-heart-pulse"></i>
+              </div>
+              <div class="footer-logo-text">
+                <h3>CardioCare</h3>
+                <span>HEART SPECIALISTS</span>
+              </div>
+            </div>
+            <p class="footer-about">
+              CardioCare is a premier cardiology clinic dedicated to delivering
+              world-class heart care with compassion. Since 2003, we've been the
+              most trusted cardiac practice in the region, combining advanced
+              technology with a patient-first philosophy.
+            </p>
+            <div class="footer-badges-grid">
+              <span class="f-badge"
+                ><i class="fa-solid fa-award"></i> FACC Certified</span
+              >
+              <span class="f-badge"
+                ><i class="fa-solid fa-shield-halved"></i> HIPAA Compliant</span
+              >
+              <span class="f-badge"
+                ><i class="fa-solid fa-star"></i> Top Rated 2026</span
+              >
+              <span class="f-badge"
+                ><i class="fa-solid fa-heart-circle-check"></i> AHA Member</span
+              >
+            </div>
+            <div class="footer-socials-row">
+              <span>Follow Us:</span>
+              <a href="#" class="f-social-icon"
+                ><i class="fa-brands fa-facebook-f"></i
+              ></a>
+              <a href="#" class="f-social-icon"
+                ><i class="fa-brands fa-instagram"></i
+              ></a>
+              <a href="#" class="f-social-icon"
+                ><i class="fa-brands fa-linkedin-in"></i
+              ></a>
+              <a href="#" class="f-social-icon"
+                ><i class="fa-brands fa-youtube"></i
+              ></a>
+            </div>
+          </div>
+
+          <!-- Col 2: Nested Newsletter Box inside Footer -->
+          <div class="footer-newsletter-col">
+            <div class="footer-newsletter-box">
+              <div class="fn-header">
+                <i class="fa-solid fa-envelope-open-text"></i>
+                <div>
+                  <h4>Heart Health Newsletter</h4>
+                  <span>Join 12,000+ subscribers</span>
+                </div>
+              </div>
+              <p>
+                Get weekly tips on heart health, cardiology news, treatment
+                breakthroughs, and clinic updates delivered right to your inbox.
+              </p>
+              <form class="fn-form">
+                <input
+                  type="email"
+                  placeholder="Enter your email address"
+                  required
+                />
+                <button type="submit">Subscribe</button>
+              </form>
+              <span class="fn-note"
+                ><i class="fa-solid fa-lock"></i> Your privacy is protected.
+                Unsubscribe at any time. No spam.</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <hr class="footer-divider" />
+
+        <!-- Links Columns Grid -->
+        <div class="footer-links-grid">
+          <!-- Medical Services -->
+          <div class="footer-col">
+            <h4>Medical Services</h4>
+            <ul>
+              <li><a href="#">Heart Consultation</a></li>
+              <li><a href="#">ECG & Diagnostics</a></li>
+              <li><a href="#">Hypertension Care</a></li>
+              <li><a href="#">Cardiac Rehab</a></li>
+              <li><a href="#">Preventive Care</a></li>
+              <li><a href="#">Emergency Care</a></li>
+              <li><a href="#">Electrophysiology</a></li>
+            </ul>
+          </div>
+
+          <!-- Patient Resources -->
+          <div class="footer-col">
+            <h4>Patient Resources</h4>
+            <ul>
+              <li><a href="#">Book Appointment</a></li>
+              <li><a href="#">Patient Portal</a></li>
+              <li><a href="#">Telehealth</a></li>
+              <li><a href="#">Patient FAQ</a></li>
+              <li><a href="#">Insurance Info</a></li>
+              <li><a href="#">Medical Records</a></li>
+              <li><a href="#">Billing & Payments</a></li>
+            </ul>
+          </div>
+
+          <!-- Quick Links -->
+          <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="#">About Doctor</a></li>
+              <li><a href="#">Departments</a></li>
+              <li><a href="#">Health Blog</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Research</a></li>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#">Sitemap</a></li>
+            </ul>
+          </div>
+
+          <!-- Working Hours -->
+          <div class="footer-col">
+            <h4>Working Hours</h4>
+            <div class="footer-hours-list">
+              <p><span>Monday</span> <strong>8AM - 8PM</strong></p>
+              <p><span>Tuesday</span> <strong>8AM - 8PM</strong></p>
+              <p><span>Wednesday</span> <strong>8AM - 8PM</strong></p>
+              <p><span>Thursday</span> <strong>8AM - 8PM</strong></p>
+              <p><span>Friday</span> <strong>8AM - 8PM</strong></p>
+              <p><span>Saturday</span> <strong>9AM - 5PM</strong></p>
+              <p>
+                <span>Sunday</span>
+                <strong class="emergency-text">Emergency Only</strong>
+              </p>
+            </div>
+            <div class="footer-open-status">
+              <span class="status-dot"></span> Currently Open
+            </div>
+          </div>
+
+          <!-- Contact Info -->
+          <div class="footer-col">
+            <h4>Contact Info</h4>
+            <div class="footer-contact-info">
+              <div class="fc-item">
+                <i class="fa-solid fa-location-dot"></i>
+                <div>
+                  <strong>Our Location</strong>
+                  <p>123 Medical Center Dr, Suite 400, New York, NY 10001</p>
+                </div>
+              </div>
+              <div class="fc-item">
+                <i class="fa-solid fa-phone"></i>
+                <div>
+                  <strong>Phone</strong>
+                  <p>+1 (800) CARDIO<br />+1 (212) 555-0123</p>
+                </div>
+              </div>
+              <div class="fc-item">
+                <i class="fa-solid fa-envelope"></i>
+                <div>
+                  <strong>Email</strong>
+                  <p>care@cardiocare.com<br />appointments@cardiocare.com</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
